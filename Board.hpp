@@ -27,6 +27,8 @@ namespace pandemic {
         // const int operator[] (const City&) const;
         int& operator[] (const City&) ;
         friend ostream& operator<< (std::ostream&, const Board& game);
+
+        Board& remove_cures();
     };
 
 

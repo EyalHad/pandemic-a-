@@ -211,4 +211,7 @@ namespace pandemic{
         os << "Game: d"  << game.diseaseCount << endl;
         return os;
     }
+    Board& Board::remove_cures(){
+        return *this;
+    }
 };

@@ -7,6 +7,6 @@
 using namespace std;
 using namespace pandemic;
 
-Medic& Medic::treat(){
+Medic& Medic::treat(City){
     return *this;
 }

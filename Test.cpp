@@ -22,10 +22,41 @@ using namespace std;
 #include "Color.hpp"
 #include "City.hpp"
 
+
+void take_5Black(Player& mishu){
+    mishu.take_card(City::Algiers)
+    .take_card(City::Baghdad)
+    .take_card(City::Cairo)
+    .take_card(City::Delhi)
+    .take_card(City::Istanbul);
+}
+void take_5Blue(Player& mishu){
+    mishu.take_card(City::Atlanta)
+    .take_card(City::London)
+    .take_card(City::Chicago)
+    .take_card(City::Madrid)
+    .take_card(City::Montreal);
+}
+void take_5Red(Player& mishu){
+    mishu.take_card(City::Osaka)
+    .take_card(City::HongKong)
+    .take_card(City::HoChiMinhCity)
+    .take_card(City::Jakarta)
+    .take_card(City::Beijing);    
+}
+void take_5Yellow(Player& mishu){
+    mishu.take_card(City::Johannesburg)
+    .take_card(City::Bogota)
+    .take_card(City::BuenosAires)
+    .take_card(City::LosAngeles)
+    .take_card(City::MexicoCity);    
+}
+
+
 TEST_CASE("GAME"){
 
     Board b1;
-
+ 
 
     SUBCASE("Researcher Role"){
 
@@ -70,9 +101,9 @@ TEST_CASE("GAME"){
         david.take_card(City::Algiers);
         CHECK_NOTHROW(david.fly_direct(City::Algiers));
 
-        CHECK_NOTHROW(david.treat()); // Need to reduce to ZERO there is a Black cure
+        CHECK_NOTHROW(david.treat(City::Algiers)); // Need to reduce to ZERO there is a Black cure
 
-        CHECK_THROWS(david.treat()); // When using treat on ZERO level it is illegal
+        CHECK_THROWS(david.treat(City::Algiers)); // When using treat on ZERO level it is illegal
         CHECK_THROWS(david.drive(City::Tokyo)); // We Have the right Card (Also irrelevant) but we are not on a neighbor City
 
         david.take_card(City::Atlanta)
@@ -101,26 +132,26 @@ TEST_CASE("GAME"){
 
         david.take_card(City::Atlanta);
         CHECK_NOTHROW(david.fly_direct(City::Atlanta));
-        CHECK_NOTHROW(david.treat());
+        CHECK_NOTHROW(david.treat(City::Atlanta));
 
 
         CHECK_THROWS(david.fly_direct(City::Kolkata)); // We had it but not anymore
         CHECK_NOTHROW(david.fly_direct(City::Bangkok));
-        CHECK_NOTHROW(david.treat());
+        CHECK_NOTHROW(david.treat(City::Bangkok));
 
         david.take_card(City::Bogota);
         CHECK_NOTHROW(david.fly_direct(City::Bogota));
         CHECK_NOTHROW(david.drive(City::BuenosAires));
 
-        CHECK_NOTHROW(david.treat());
-        CHECK_NOTHROW(david.treat());
-        CHECK_THROWS(david.treat()); // When using treat on ZERO level it is illegal
+        CHECK_NOTHROW(david.treat(City::BuenosAires));
+        CHECK_NOTHROW(david.treat(City::BuenosAires));
+        CHECK_THROWS(david.treat(City::BuenosAires)); // When using treat on ZERO level it is illegal
 
 
         CHECK_FALSE(b1.is_clean());
 
         CHECK_NOTHROW(david.fly_direct(City::Delhi));
-        CHECK_NOTHROW(david.treat());
+        CHECK_NOTHROW(david.treat(City::Delhi));
 
         CHECK(b1.is_clean() == true);
 
@@ -138,11 +169,11 @@ TEST_CASE("GAME"){
         CHECK_NOTHROW(shlomo.drive(City::Chicago)); 
 
         CHECK_NOTHROW(shlomo.build()); // Station in Chicago
-        CHECK_THROWS(shlomo.treat()); // There Are no disease here...
+        CHECK_THROWS(shlomo.treat(City::Chicago)); // There Are no disease here...
 
         CHECK_NOTHROW(shlomo.drive(City::Montreal));
-        CHECK_NOTHROW(shlomo.treat());
-        CHECK_THROWS(shlomo.treat()); // When ZERO we throw !
+        CHECK_NOTHROW(shlomo.treat(City::Montreal));
+        CHECK_THROWS(shlomo.treat(City::Montreal)); // When ZERO we throw !
 
         CHECK_THROWS(shlomo.drive(City::Montreal)); // We already here :)
         CHECK_NOTHROW(shlomo.build()); // Station in Montreal
@@ -162,8 +193,8 @@ TEST_CASE("GAME"){
 
         CHECK_FALSE(b1.is_clean());
 
-        CHECK_NOTHROW(shlomo.treat());
-        CHECK_THROWS(shlomo.treat()); // When ZERO we throw !
+        CHECK_NOTHROW(shlomo.treat(City::Atlanta));
+        CHECK_THROWS(shlomo.treat(City::Atlanta)); // When ZERO we throw !
 
         CHECK(b1.is_clean() == true);
 
@@ -186,11 +217,7 @@ TEST_CASE("GAME"){
         b1[City::Tehran] = 5;
 
 
-        moshe.take_card(City::Algiers)
-        .take_card(City::Baghdad)
-        .take_card(City::Cairo)
-        .take_card(City::Chennai)
-        .take_card(City::Delhi);
+        take_5Black(moshe);
         
 
         CHECK_NOTHROW(shlomo.build()); // Station in SanFrancisco
@@ -200,29 +227,28 @@ TEST_CASE("GAME"){
         moshe.take_card(City::SanFrancisco);
 
         CHECK_NOTHROW(moshe.fly_direct(City::Algiers)); // Flying To use Treat 
-        CHECK_NOTHROW(moshe.treat()); 
-        CHECK_THROWS(moshe.treat()); // When ZERO we throw !
+        CHECK_NOTHROW(moshe.treat(City::Algiers)); 
+        CHECK_THROWS(moshe.treat(City::Algiers)); // When ZERO we throw !
 
         CHECK_NOTHROW(moshe.fly_direct(City::SanFrancisco)); //Come back to use his abilty
 
         moshe.take_card(City::SanFrancisco);
 
         CHECK_NOTHROW(moshe.fly_direct(City::Delhi)); // Flying To use Treat 
-        CHECK_NOTHROW(moshe.treat()); 
-        CHECK_THROWS(moshe.treat()); // When ZERO we throw !
+        CHECK_NOTHROW(moshe.treat(City::Delhi)); 
+        CHECK_THROWS(moshe.treat(City::Delhi)); // When ZERO we throw !
 
         CHECK_NOTHROW(moshe.fly_direct(City::SanFrancisco)); //Come back to use his abilty
 
         moshe.take_card(City::SanFrancisco);
 
         CHECK_NOTHROW(moshe.fly_direct(City::Tehran)); // Flying To use Treat 
-        CHECK_NOTHROW(moshe.treat()); 
-        CHECK_THROWS(moshe.treat()); // When ZERO we throw !
+        CHECK_NOTHROW(moshe.treat(City::Tehran)); 
+        CHECK_THROWS(moshe.treat(City::Tehran)); // When ZERO we throw !
 
         // He can stay over there cuz he cleared the game from all diseases
 
         CHECK(b1.is_clean() == true);
-        CHECK_THROWS(b1[City::Lagos] = -2);
         
     }
 
@@ -233,14 +259,12 @@ TEST_CASE("GAME"){
         Scientist levana(b1,City::Shanghai,2);
 
         b1[City::Bangkok] = 3;
-        CHECK_THROWS(b1[City::Lagos] = -2);
 
-        dana.take_card(City::Shanghai)
-        .take_card(City::Sydney)
-        .take_card(City::Tokyo)
-        .take_card(City::Beijing)
-        .take_card(City::Bangkok);
 
+
+        take_5Red(dana);
+
+        dana.take_card(City::Shanghai);
         CHECK_NOTHROW(dana.build());
 
         dana.take_card(City::Shanghai);
@@ -253,8 +277,8 @@ TEST_CASE("GAME"){
         CHECK_NOTHROW(dana.drive(City::HongKong));
         CHECK_NOTHROW(dana.drive(City::Bangkok)); // She arrived to the city that has disease
 
-        CHECK_NOTHROW(dana.treat());
-        CHECK_THROWS(dana.treat()); // ZERO already
+        CHECK_NOTHROW(dana.treat(City::Bangkok));
+        CHECK_THROWS(dana.treat(City::Bangkok)); // ZERO already
 
         CHECK_FALSE(b1[City::Bangkok] == 3);
 
@@ -282,7 +306,7 @@ TEST_CASE("GAME"){
         CHECK_THROWS(levana.treat(City::Chicago)); // levana maybe Scientist But not a FieldDoctor
 
         CHECK_NOTHROW(levana.drive(City::Chicago));
-        CHECK_NOTHROW(levana.treat());    
+        CHECK_NOTHROW(levana.treat(City::Chicago));    
 
         CHECK_NOTHROW(levana.fly_shuttle(City::Shanghai));
 
@@ -304,38 +328,22 @@ TEST_CASE("GAME"){
          * 
          */
 
-        david.take_card(City::Miami)
-        .take_card(City::MexicoCity)
-        .take_card(City::Santiago)
-        .take_card(City::SaoPaulo)
-        .take_card(City::BuenosAires)   // Has 5 Yellows
-        .take_card(City::Algiers)
-        .take_card(City::Baghdad)
-        .take_card(City::Cairo)
-        .take_card(City::Chennai)
-        .take_card(City::Delhi)         // Has 5 Black
-        .take_card(City::Essen)
-        .take_card(City::London)
-        .take_card(City::Chicago)
-        .take_card(City::Madrid)
-        .take_card(City::Montreal)      // Has 5 Blue
-        .take_card(City::Jakarta)
-        .take_card(City::HongKong)
-        .take_card(City::Bangkok)
-        .take_card(City::Beijing)
-        .take_card(City::Manila);       // Has 5 Red
+
+        take_5Red(david);
+        take_5Yellow(david);
+        take_5Black(david);
+        take_5Blue(david);
 
 
         b1[City::London] = 18;
-        CHECK_NOTHROW(avraham.treat());
-        CHECK_THROWS(avraham.treat());
+        CHECK_NOTHROW(avraham.treat(City::London));
+        CHECK_THROWS(avraham.treat(City::London));
 
         b1[City::SaoPaulo] = 62;
         b1[City::Khartoum] = 78;
         b1[City::Cairo] = 2;
         b1[City::HoChiMinhCity] = 74;
 
-        CHECK_THROWS(b1[City::Lagos] = -2);
 
         CHECK_NOTHROW(david.discover_cure(Color::Black));
         CHECK_NOTHROW(david.discover_cure(Color::Red));
@@ -353,7 +361,7 @@ TEST_CASE("GAME"){
         CHECK(b1[City::Khartoum] == 0 );
         CHECK_NOTHROW(avraham.drive(City::Cairo));
         CHECK(b1[City::Cairo] == 0 );
-        CHECK_THROWS(avraham.treat()); // ZERO ALREADY
+        CHECK_THROWS(avraham.treat(City::Cairo)); // ZERO ALREADY
         avraham.take_card(City::HoChiMinhCity);
 
         CHECK_NOTHROW(avraham.fly_direct(City::HoChiMinhCity));
@@ -454,10 +462,190 @@ TEST_CASE("GAME"){
         
 
 
-    }  
-
-         
-
-
+    }
 
 }
+
+TEST_CASE("MultiGame With All Characters") {
+
+    Board _Game1;
+
+
+        Virologist simha(_Game1,City::Cairo);
+        GeneSplicer itay(_Game1,City::Osaka);
+        FieldDoctor noah(_Game1,City::Paris);
+        Medic avraham(_Game1,City::London);
+        Researcher david(_Game1,City::Miami);
+        Scientist levana(_Game1,City::Shanghai,2);
+        OperationsExpert shlomo(_Game1,City::SanFrancisco);
+        Dispatcher moshe(_Game1,City::SanFrancisco);
+
+
+   _Game1[City::Madrid] = 3;
+   _Game1[City::Lima] = 6;
+   _Game1[City::Moscow] = 9;
+   _Game1[City::Sydney] = 12;     
+
+    simha.take_card(City::Washington);
+    CHECK(simha.role() == "Virologist");
+        CHECK_THROWS(simha.treat(City::Washington)); // ZERO
+    CHECK_NOTHROW(simha.drive(City::Baghdad)); // simha is in Baghdad FINISH TURN.
+
+    itay.take_card(City::Taipei);
+    CHECK(itay.role() == "GeneSplicer");
+        CHECK_THROWS(itay.treat(City::Sydney)); // Not in The City and Not Virologist
+    CHECK_NOTHROW(itay.fly_direct(City::Taipei)); // itay is in Taipei FINISH TURN.
+
+    /** Adding a little twist */
+
+    take_5Blue(david);
+    CHECK_NOTHROW(david.discover_cure(Color::Blue));
+    _Game1.remove_cures();
+
+    /** The Game should be back to normal */
+
+    CHECK_NOTHROW(noah.treat(City::Madrid));
+    CHECK_NOTHROW(noah.drive(City::London));
+    CHECK_NOTHROW(noah.treat(City::Madrid)); // noah is in Madrid FINISH TURN.
+
+    CHECK_EQ(_Game1[City::Madrid],1);
+
+    avraham.take_card(City::Santiago);
+    CHECK_NOTHROW(avraham.drive(City::Madrid));
+    CHECK_NOTHROW(avraham.treat(City::Madrid));
+    CHECK_NOTHROW(avraham.fly_direct(City::Santiago)); // avraham is in Santiago FINISH TURN
+
+    CHECK_EQ(_Game1[City::Madrid],0);
+
+    take_5Yellow(david);
+    CHECK_NOTHROW(david.discover_cure(Color::Yellow)); // david is in Miami FINISH TURN
+
+    /** The vaccine for the Yellow diease has been Found ! */
+
+    levana.take_card(City::Algiers)
+        .take_card(City::Baghdad);
+    CHECK_THROWS(levana.discover_cure(Color::Black)); // No Research Station here :(
+    levana.take_card(City::Shanghai);
+    CHECK_NOTHROW(levana.fly_charter(City::Sydney)); // levana is in Sydney (Should throw the Shanghai Card) FINISH TURN
+
+    CHECK_NOTHROW(shlomo.build()); // Research Station in SanFrancisco
+    shlomo.take_card(City::SanFrancisco);
+    CHECK_NOTHROW(shlomo.fly_charter(City::Sydney));
+    CHECK_NOTHROW(shlomo.build()); // Research Station in Sydney FINISH TURN
+
+    CHECK_FALSE(_Game1.is_clean());
+
+    CHECK_NOTHROW(moshe.fly_direct(City::Jakarta)); // Do not Need a card for that :)
+        CHECK_THROWS(moshe.drive(City::SanFrancisco));  // Cant do that
+        CHECK_THROWS(moshe.fly_shuttle(City::Sydney));  // Cant do that there is not Research Station here
+    CHECK_NOTHROW(moshe.drive(City::Sydney)); // moshe is in Sydney FINSH TURN
+
+
+    /** Now to clear the Game */
+
+    CHECK_NOTHROW(avraham.drive(City::Lima)); // There is a cure do not need treat, no diease here any more  
+    CHECK_EQ(_Game1[City::Lima],0);  
+
+    CHECK_NOTHROW(levana.treat(City::Sydney)
+    .treat(City::Sydney));
+    CHECK_NOTHROW(shlomo.treat(City::Sydney)
+    .treat(City::Sydney));
+    CHECK_NOTHROW(moshe.treat(City::Sydney)
+    .treat(City::Sydney));
+        CHECK_EQ(_Game1[City::Sydney],6);  
+    CHECK_NOTHROW(levana.treat(City::Sydney)
+    .treat(City::Sydney));
+    CHECK_NOTHROW(shlomo.treat(City::Sydney)
+    .treat(City::Sydney));
+    CHECK_NOTHROW(moshe.treat(City::Sydney)
+    .treat(City::Sydney));
+        CHECK_EQ(_Game1[City::Sydney],0);  
+
+    CHECK_NOTHROW(simha.take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow)
+    .take_card(City::Moscow).treat(City::Moscow));
+
+
+    CHECK(_Game1.is_clean() == true);
+
+    CHECK(simha.role() == "Virologist");
+    CHECK(itay.role() == "GeneSplicer");
+    CHECK(noah.role() == "FieldDoctor");
+    CHECK(avraham.role() == "Medic");
+    CHECK(david.role() == "Researcher");
+    CHECK(levana.role() == "Scientist");
+    CHECK(shlomo.role() == "OperationsExpert");
+    CHECK(moshe.role() == "Dispatcher");
+
+          
+    
+}
+
+TEST_CASE(" Actions& "){
+    Board _EmptyGame;
+    SUBCASE(" drive() "){
+        Player clumnic(_EmptyGame,City::Riyadh);
+        CHECK_THROWS(clumnic.drive(City::Cairo).drive(City::Lagos));
+    }
+    SUBCASE(" fly_direct() & build() & treat() "){
+        OperationsExpert builder(_EmptyGame,City::LosAngeles);
+
+        CHECK_NOTHROW(builder.build().drive(City::SanFrancisco)
+        .build().drive(City::Chicago)
+        .build().drive(City::Montreal)
+        .build().drive(City::NewYork).build());
+
+        Dispatcher flyer(_EmptyGame,City::Montreal);
+
+        _EmptyGame[City::Chicago] = 1;
+        _EmptyGame[City::SanFrancisco] = 1;
+        CHECK_NOTHROW(flyer.fly_direct(City::Chicago).treat(City::Chicago)
+        .fly_direct(City::NewYork).fly_direct(City::SanFrancisco).treat(City::SanFrancisco));
+
+        CHECK_EQ(_EmptyGame.is_clean(),true);
+    }
+    SUBCASE(" fly_charter() & fly_shuttle() "){
+        OperationsExpert builder1(_EmptyGame,City::LosAngeles);
+
+        CHECK_NOTHROW(builder1.build().drive(City::SanFrancisco)
+        .build().drive(City::Chicago)
+        .build().drive(City::Montreal)
+        .build().drive(City::NewYork).build());
+
+        OperationsExpert builder2(_EmptyGame,City::Milan);
+
+        CHECK_NOTHROW(builder2.build().drive(City::Istanbul)
+        .build().drive(City::Baghdad)
+        .build().drive(City::Karachi)
+        .build().drive(City::Mumbai).build());
+
+        Player clumnic(_EmptyGame,City::Riyadh);
+
+        clumnic.take_card(City::SanFrancisco).take_card(City::Chicago)
+        .take_card(City::Montreal).take_card(City::Montreal)
+        .take_card(City::NewYork)
+        .take_card(City::Milan).take_card(City::Istanbul).take_card(City::Baghdad)
+        .take_card(City::Karachi).take_card(City::Mumbai);
+
+        _EmptyGame[City::Mumbai] = 1;
+        _EmptyGame[City::Montreal] = 1;
+        _EmptyGame[City::SanFrancisco] = 1;
+
+
+         CHECK_NOTHROW(clumnic.fly_shuttle(City::SanFrancisco).treat(City::SanFrancisco)
+         .fly_charter(City::Montreal).treat(City::Montreal)
+         .fly_shuttle(City::Mumbai).treat(City::Mumbai));
+
+        CHECK_EQ(_EmptyGame.is_clean(),true);
+
+
+    }
+}
+
+         

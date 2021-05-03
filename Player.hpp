@@ -25,7 +25,6 @@ namespace pandemic {
             virtual Player& fly_direct(const City&);
             virtual Player& build();
             virtual Player& discover_cure(const Color&);
-            virtual Player& treat();
             virtual Player& treat(const City&);
 
     };

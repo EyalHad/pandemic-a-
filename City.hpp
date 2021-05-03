@@ -3,7 +3,7 @@
 
 
 
-	enum class City {
+	enum class City : int {
 
 		/**	BLACK */
         Algiers = 0, Baghdad, Cairo, Chennai, Delhi, Istanbul = 5, Karachi, Kolkata, Moscow, Mumbai, Riyadh, Tehran = 11,

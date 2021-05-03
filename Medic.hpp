@@ -7,7 +7,7 @@ namespace pandemic{
     class Medic: public Player{
     public:
         Medic(Board game, City town):Player(game, town){} 
-        Medic& treat();
+        Medic& treat(City);
         const std::string role() const{
             return "Medic";
         }

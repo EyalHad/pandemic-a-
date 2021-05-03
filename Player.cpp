@@ -38,10 +38,6 @@ namespace pandemic {
         return *this;
     }
 
-    Player& Player::treat() {
-        // cout << "treat" << endl;
-        return *this;
-    }
 
     Player& Player::treat(const City& town) {
         // cout << "treat with city" << endl;
