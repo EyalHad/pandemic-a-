@@ -11,15 +11,20 @@ namespace pandemic {
 
         protected:
             Board& game;
-            set<City> cards;
+            map<const City,bool> cards;
             City town;
 
         public:
-            Player(Board& game, City town): game(game), town(town){}
+            Player(Board& game, City town): game(game), town(town){remove_cards();}
             Player& take_card(const City&);
-            Player& drive(const City&);
-            Player& fly_charter(const City&);
-            Player& fly_shuttle(const City&);
+            virtual Player& drive(const City&);
+            virtual Player& fly_charter(const City&);
+            virtual Player& fly_shuttle(const City&);
+
+            Player& remove_cards(){
+                for(auto& card : cards){card.second = false;}
+                return *this;
+            }
 
             virtual const string role(){ return "Player";}
             virtual Player& fly_direct(const City&);

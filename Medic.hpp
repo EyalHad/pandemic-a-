@@ -8,6 +8,10 @@ namespace pandemic{
     public:
         Medic(Board game, City town):Player(game, town){} 
         Medic& treat(City);
+        Medic& drive(City);
+        Medic& fly_direct(City);
+        Medic& fly_shuttle(City);
+        Medic& fly_charter(City);
         const std::string role() const{
             return "Medic";
         }
